@@ -5,6 +5,7 @@ import TaskForm from "./components/TaskForm";
 import { TaskContextProvider } from "./contexts/TaskContext";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import UserProfile from "./components/UserProfile";
 import { AuthContext } from "./contexts/AuthContext";
 import { useContext } from "react";
 
@@ -28,6 +29,10 @@ const App = () => {
             <Route
               path="/signup"
               element={!user ? <Signup /> : <Navigate to="/" />}
+            />
+            <Route
+              path="/profile"
+              element={user ? <UserProfile /> : <Navigate to="/login" />}
             />
           </Routes>
         </TaskContextProvider>

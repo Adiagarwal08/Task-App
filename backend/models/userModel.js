@@ -6,6 +6,23 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
   {
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    age: {
+      type: Number,
+      required: false,
+      min: 0,
+      max: 120,
+    },
+    about: {
+      type: String,
+      required: false,
+      trim: true,
+      maxlength: 500,
+    },
     email: {
       type: String,
       required: true,
@@ -39,9 +56,13 @@ userSchema.statics.login = async function (email, password) {
   return user;
 };
 
-userSchema.statics.signup = async function (email, password) {
-  if (!email || !password) {
+userSchema.statics.signup = async function (name, email, password) {
+  if (!name || !email || !password) {
     throw new Error("Please fill all the fields.");
+  }
+
+  if (name.length < 2) {
+    throw new Error("Please enter a valid name.");
   }
 
   if (!validator.isEmail(email)) {
@@ -62,7 +83,7 @@ userSchema.statics.signup = async function (email, password) {
 
   const hash = await bcrypt.hash(password, salt);
 
-  const user = await this.create({ email, password: hash });
+  const user = await this.create({ name, email, password: hash });
 
   return user;
 };
